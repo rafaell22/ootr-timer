@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Timer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="manifest" href="/manifest.json">
+        <style>
+            @font-face {
+                font-family: 'triforcetriforce';
+                src: url('triforce-webfont.woff2') format('woff2'),
+                     url('triforce-webfont.woff') format('woff');
+                font-weight: normal;
+                font-style: normal;
+
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .hidden {
+                display: none !important;
+            }
+
+            .row {
+                display: block;
+                margin-bottom: 15px;
+            }
+
+            body {
+              background-color: #494b4b;
+            }
+
+            #timer input[type="text"] {
+              width: 95vw;
+              min-width: 200px;
+              height: 50px;
+              font-size: 24px;
+              margin: auto;
+            }
+
+            #timer input[type="button"] {
+                display: block;
+                width: 95vw;
+                min-width: 200px;
+                height: 80px;
+                text-align: center;
+                font-size: 32px;
+                background-color: #0d9263;
+                color: #d4ce46;
+                font-weight: bold;
+                border-top-color: #4aba91;
+                border-left-color: #4aba91;
+                border-right-color: #0e5135;
+                border-bottom-color: #0e5135;
+                border-radius: 10px;
+                margin: auto auto 15px auto;
+            }
+
+            #timer input[type="checkbox"] {
+                float: left;
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+            }
+
+            input[type="checkbox"] + label {
+              display: inline-block;
+              line-height: 28px;
+              color: #4aba91;
+            }
+
+            #time-container {
+                width: 400px;
+                margin-bottom: 25px;
+                text-align: left;
+                font-family: 'triforcetriforce';
+                font-size: 50px;
+                overflow-y: hidden;
+                color: #d4ce46;
+            }
+
+            #timer {
+              position: absolute;
+              top: 200px;
+              left: 50%;
+              transform: translate(-50%, -0);
+            }
+
+            #racetimeDialog {
+              background-color: #d9d9d9;
+              border-radius: 5px;
+              box-shadow: 4px 4px 0 0 4px;
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%);
+            }
+
+        </style>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.css">
+    </head>
+    <body>
+      <script src="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.js"
+    ></script>
+      <div id="install-prompt" class="install-prompt hidden">
+        <div class="install-prompt-container">
+          <div class="install-prompt-icon">
+            <img src="./assets/appIcon.png" alt="App Icon">
+          </div>
+          <div class="install-prompt-content">
+            <p class="install-prompt-text">Install this app on your device for a better experience.</p>
+          </div>
+          <div class="install-prompt-actions">
+            <button id="install-button" class="install-button">Install</button>
+            <button id="dismiss-button" class="dismiss-button">Dismiss</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="timer">
+        <div id="time-container">
+          <span id="hours">00</span>
+          :
+          <span id="minutes">00</span>
+          :
+          <span id="seconds">00</span>
+          .
+          <span id="milliseconds">000</span>
+        </div>
+        <input type="button" value="START" id="btnStart" />
+        <input type="button" value="PAUSE" id="btnPause" class="hidden" />
+        <input type="button" value="RESET" id="btnReset" class="hidden" />
+        <input type="button" value="RACETIME" id="btnJoin" />
+
+        <div class="row">
+          <input type="checkbox" value="false" id="ckCustomStartTime" />
+          <label>Custom Start Time</label>
+        </div>
+        <div class="row hidden">
+          <input type="text" value="" id="txtTimerStart" placeholder="Start Time (seconds)" />
+        </div>
+        <div class="row">
+          <input type="checkbox" value="false" id="ckSound" />
+          <label>Countdown Sound</label>
+        </div>
+
+        <div id="racetimeDialog">
+
+        </div>
+      </div>
+
+      <audio src="./countdown.wav"></audio>
+      <script src="./scripts/install.js"></script>
+      <script type="module" src="./scripts/main.js"></script>
+    </body>
+</html>
