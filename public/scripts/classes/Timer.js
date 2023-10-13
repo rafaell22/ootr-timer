@@ -59,15 +59,12 @@ class Timer extends Fsm {
    * @param {number} timestamp - total time passed in milliseconds
    */
   update(timestamp) {
-    console.log('timestamp', timestamp)
-    console.log('prevTimestamp', this.prevTimestamp)
     let dt;
     if(!this.prevTimestamp) {
         dt = 0;
     } else {
         dt = timestamp - this.prevTimestamp;
     }
-    console.log('dt:', dt)
 
     this.value = this.value + dt * (
       this.direction ?? 1

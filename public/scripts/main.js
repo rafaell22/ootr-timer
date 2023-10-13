@@ -1,24 +1,58 @@
 // @ts-check
 import Timer from './classes/Timer.js';
 import TIMER_STATES from './TIMER_STATES.js';
+import Race from './classes/Race.js';
+import tinyduration from './tinyduration.js';
 
-const elMinutes = document.getElementById('minutes');
-const elSeconds = document.getElementById('seconds');
-const elMilli = document.getElementById('milliseconds');
+console.log(tinyduration)
 
-const btnStart = document.getElementById('btnStart');
-const btnPause = document.getElementById('btnPause');
-const btnReset = document.getElementById('btnReset');
-const btnJoin = document.getElementById('btnJoin');
+const elReferences = {};
+elReferences.timerDisplay = {
+    hours : document.getElementById('hours'),
+    minutes : document.getElementById('minutes'),
+    seconds : document.getElementById('seconds'),
+    milliseconds : document.getElementById('milliseconds'),
+};
 
-const elAudio = document.querySelector('audio');
+elReferences.timerButtons = {
+    start : document.getElementById('btnStart'),
+    pause : document.getElementById('btnPause'),
+    reset : document.getElementById('btnReset'),
+    racetime : document.getElementById('btnJoin'),
+}
 
-const ckCustomStartTime = document.getElementById('ckCustomStartTime');
-const inTimerStart = document.getElementById('txtTimerStart');
+elReferences.timerSettings = {
+    customStartTime : document.getElementById('ckCustomStartTime'),
+    timerStartValue : document.getElementById('txtTimerStart'),
+}
+
+elReferences.audio = document.querySelector('audio');
+elReferences.dialogOverlay = document.getElementById('dialog-overlay');
+elReferences.loader = document.getElementById('loader');
+elReferences.racetime = {
+    dialog: document.getElementById('racetimeDialog'),
+    selectRace: document.getElementById('selectRace'),
+    selectCategory: document.getElementById('selectCategory'),
+    selectButton: document.getElementById('btnSelectRace'),
+}
 
 let countdownAudio;
 let animationFrame;
 const timer = new Timer();
+
+/**
+ * @param {HTMLElement} el
+ */
+const hide = function(el) {
+    el.classList.add('hidden');
+}
+
+/**
+ * @param {HTMLElement} el
+ */
+const show = function(el) {
+    el.classList.remove('hidden');
+}
 
 /**
  * @param {number} value
@@ -28,9 +62,9 @@ const updateTimerDisplay = function(value) {
     const seconds = Math.floor(Math.abs(value) / 1000) % 60;
     const milliseconds = Math.floor(Math.abs(value) % 1000);
 
-    elMinutes.textContent = ( minutes < 10 ? '0' : '' ) + minutes;
-    elSeconds.textContent = ( seconds < 10 ? '0' : '' ) + seconds;
-    elMilli.textContent = ( milliseconds < 100 ? '0' : '' ) + ( milliseconds < 10 ? '0' : '') + milliseconds ;
+    elReferences.timerDisplay.minutes.textContent = ( minutes < 10 ? '0' : '' ) + minutes;
+    elReferences.timerDisplay.seconds.textContent = ( seconds < 10 ? '0' : '' ) + seconds;
+    elReferences.timerDisplay.milliseconds.textContent = ( milliseconds < 100 ? '0' : '' ) + ( milliseconds < 10 ? '0' : '') + milliseconds ;
 }
 
 /**
@@ -42,104 +76,122 @@ const update = (timestamp) => {
     animationFrame = requestAnimationFrame(update);
 };
 
-btnStart?.addEventListener('click', () => {
+elReferences.timerButtons.start?.addEventListener('click', () => {
     if(timer.is(TIMER_STATES.PAUSED)) {
         timer['resume']();
     } else {
         timer['start']();
         if(
-            ckCustomStartTime?.checked &&
-            inTimerStart?.value !== ''
+            elReferences.timerSettings.customTimerStart?.['checked'] &&
+            elReferences.timerSettings.timerStartValue?.['value'] !== ''
         ) {
-            timer.value = parseInt(inTimerStart.value, 10) * 1000;
+            timer.value = parseInt(elReferences.timerSettings.timerStartValue['value'], 10) * 1000;
         }
     }
 
     animationFrame = requestAnimationFrame(update);
 
-    btnStart?.classList.add('hidden');
-    btnReset?.classList.add('hidden');
-    btnPause?.classList.remove('hidden');
-    btnJoin?.classList.add('hidden');
+    hide(elReferences.timerButtons.start);
+    hide(elReferences.timerButtons.reset);
+    show(elReferences.timerButtons.pause);
+    hide(elReferences.timerButtons.racetime);
 });
 
-btnPause?.addEventListener('click', () => {
+elReferences.timerButtons.pause?.addEventListener('click', () => {
     timer['pause']();
 
     cancelAnimationFrame(animationFrame);
-    btnStart?.classList.remove('hidden');
-    btnReset?.classList.remove('hidden');
-    btnPause?.classList.add('hidden');
+    show(elReferences.timerButtons.start);
+    show(elReferences.timerButtons.reset);
+    hide(elReferences.timerButtons.pause);
 });
 
-btnReset?.addEventListener('click', () => {
+elReferences.timerButtons.reset?.addEventListener('click', () => {
     timer['reset']();
     updateTimerDisplay(0);
 
-    btnStart?.classList.remove('hidden');
-    btnReset?.classList.add('hidden');
-    btnPause?.classList.add('hidden');
-    btnJoin?.classList.remove('hidden');
+    show(elReferences.timerButtons.start);
+    hide(elReferences.timerButtons.reset);
+    hide(elReferences.timerButtons.pause);
+    show(elReferences.timerButtons.racetime);
 });
 
-btnJoin?.addEventListener('click', async () => {
-    console.log('Racetime!')
-    let races;
+elReferences.dialogOverlay.addEventListener('click', () => {
+    console.log('overlay!')
+    console.log(elReferences.dialogOverlay);
+    hide(elReferences.racetime.dialog);
+    hide(elReferences.dialogOverlay);
+});
+
+let races;
+let categories;
+elReferences.timerButtons.racetime?.addEventListener('click', async () => {
+    show(elReferences.loader);
     try {
-        console.log('before')
-        races = await fetch('http://localhost:8080/ootr', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+        categories = await Race.loadCategories();
+        categories.sort((a, b) => {
+            return a.name.localeCompare(b.name);            
+        })
+
+        elReferences.racetime.selectCategory.innerHTML = '';
+        for(const category of categories) {
+            const option = document.createElement('option');
+            option.value = category.slug;
+            option.textContent = category.name;
+            elReferences.racetime.selectCategory.appendChild(option);
+        }
+
+        elReferences.racetime.selectCategory.onchange = async (event) => {
+            show(elReferences.loader);
+            const category = event.target['value'];
+            try {
+                races = await Race.loadRacesByCategory(category);
+                console.log('races: ', races);
+                elReferences.racetime.selectRace.innerHTML = '';
+                for(const race of races) {
+                    const option = document.createElement('option');
+                    option.value = race.name;
+                    option.textContent = race.info;
+                    elReferences.racetime.selectRace.appendChild(option);
+                }
+                show(elReferences.racetime.selectRace);
+                show(elReferences.racetime.selectButton);
+            } catch(errorGettingRacesList) {
+                console.log('ERROR');
+                console.log(errorGettingRacesList);
+            } finally {
+                hide(elReferences.loader);
             }
-        });
-        console.log('after')
-        console.log('races: ', await races.json())
+        }
+
+        show(elReferences.dialogOverlay);
+        show(elReferences.racetime.dialog);
+        show(elReferences.racetime.selectCategory);
     } catch(errorGettingRacesList) {
         console.log('ERROR');
         console.log(errorGettingRacesList.stack);
+    } finally {
+        hide(elReferences.loader);
     }
 });
 
-ckCustomStartTime?.addEventListener('change', () => {
-    if(ckCustomStartTime.checked) {
-        inTimerStart?.parentElement?.classList.remove('hidden');
+elReferences.timerSettings.customTimerStart?.addEventListener('change', () => {
+    if(elReferences.timerSettings.customTimerStart['checked']) {
+        elReferences.timerSettings.timerStartValue?.parentElement?.classList.remove('hidden');
     } else {
-        inTimerStart.parentElement.classList.add('hidden');
+        elReferences.timerSettings.timerStartValue.parentElement.classList.add('hidden');
     }
 });
 
-/*
- *(async function() {
- *  const result = await fetch('https://racetime.gg/races/data', {
- *      // mode: 'no-cors',
- *      method: 'GET',
- *      headers: {
- *          'Content-Type': 'application/json',
- *      }
- *  });
- *    console.log(result)
- *  const jsonResult = await result.json();
- *  console.log('races: ', jsonResult);
- *})()
- */
+elReferences.racetime.selectButton?.addEventListener('click', async () => {
+    const raceSlug = elReferences.racetime.selectRace['value'];
+    try {
+        const raceDetailsResult = await Race.loadRaceDetails(raceSlug);
+        console.log('raceDetailsResult: ', raceDetailsResult);
+    } catch(errorGettingRacesDetails) {
 
-/**
-function reqListener() {
-    console.log('loaded')
-  console.log(this.responseText);
-}
-
-const req = new XMLHttpRequest();
-req.addEventListener("load", reqListener);
-req.addEventListener('error', (error) => {
-    console.log('error: ', Object.keys(error.loaded));
-    console.log(req.status)
+    }
 })
-req.open("GET", 'https://racetime.gg/races/data');
-req.send();
-console.log(req)
-*/
 
 /*
  *const start = function() {

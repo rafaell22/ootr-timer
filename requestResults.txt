@@ -1,0 +1,74 @@
+// before the race started
+[
+    {
+        "name": "oot/dapper-compass-5401",
+        "status": {
+            "value": "invitational",
+            "verbose_value": "Invitational",
+            "help_text": "Only invitees may join this race"
+        },
+        "url": "/oot/dapper-compass-5401",
+        "data_url": "/oot/dapper-compass-5401/data",
+        "goal": {
+            "name": "Test race",
+            "custom": true
+        },
+        "info": "Testing racetime APIs",
+        "entrants_count": 2,
+        "entrants_count_finished": 0,
+        "entrants_count_inactive": 0,
+        "opened_at": "2023-10-12T18:36:49.433Z",
+        "started_at": null,
+        "time_limit": "P1DT00H00M00S"
+    }
+]
+
+// During countdown
+[
+    {
+        "name": "oot/dapper-compass-5401",
+        "status": {
+            "value": "pending",
+            "verbose_value": "Getting ready",
+            "help_text": "Waiting for race to begin"
+        },
+        "url": "/oot/dapper-compass-5401",
+        "data_url": "/oot/dapper-compass-5401/data",
+        "goal": {
+            "name": "Test race",
+            "custom": true
+        },
+        "info": "Testing racetime APIs",
+        "entrants_count": 2,
+        "entrants_count_finished": 0,
+        "entrants_count_inactive": 0,
+        "opened_at": "2023-10-12T18:36:49.433Z",
+        "started_at": "2023-10-12T18:39:15.627Z",
+        "time_limit": "P1DT00H00M00S"
+    }
+]
+
+// After start
+[
+    {
+        "name": "oot/dapper-compass-5401",
+        "status": {
+            "value": "in_progress",
+            "verbose_value": "In progress",
+            "help_text": "Race is in progress"
+        },
+        "url": "/oot/dapper-compass-5401",
+        "data_url": "/oot/dapper-compass-5401/data",
+        "goal": {
+            "name": "Test race",
+            "custom": true
+        },
+        "info": "Testing racetime APIs",
+        "entrants_count": 2,
+        "entrants_count_finished": 0,
+        "entrants_count_inactive": 0,
+        "opened_at": "2023-10-12T18:36:49.433Z",
+        "started_at": "2023-10-12T18:39:15.627Z",
+        "time_limit": "P1DT00H00M00S"
+    }
+]

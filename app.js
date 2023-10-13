@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const path = require('path')
+const axios = require('axios');
 
 const app = express();
 
@@ -14,15 +15,41 @@ app.use(helmet({
   }
 }));
 
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/timer', express.static(path.join(__dirname, 'public')));
 
-app.get('/ootr', async (req, res, next) => {
-  const axios = require('axios');
-
+app.get('/races/details/:category/:raceSlug/data', async function getRaceDetails(req, res, next) {
   try {
     const response = await axios({
       method: 'get',
-        url: 'https://racetime.gg/ootr/data'
+        url: `https://racetime.gg/${req.params.category}/${req.params.raceSlug}/data`
+    })
+
+    res.send(response.data);
+  } catch(error) {
+    console.log('ERROR!')
+    console.log(error);
+  }
+});
+
+app.get('/races/data', async (req, res, next) => {
+  try {
+    const response = await axios({
+      method: 'get',
+        url: `https://racetime.gg/races/data`
+    })
+
+    res.send(response.data);
+  } catch(error) {
+    console.log('ERROR!')
+    console.log(error);
+  }
+});
+
+app.get('/races/:category', async function getRacesByCategory(req, res, next) {
+  try {
+    const response = await axios({
+      method: 'get',
+        url: `https://racetime.gg/${req.params.category}/data`
     })
 
     res.send(response.data.current_races);
@@ -32,17 +59,19 @@ app.get('/ootr', async (req, res, next) => {
   }
 });
 
-app.use(function(req, res, next) {
+app.use(function errorOnRequest(req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 })
 
-app.use(function(err, req, res, next) {
+app.use(function handleErrors(err, req, res, next) {
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  //res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = err;
 
   res.status(err.status || 505);
+  res.send();
 });
 
 app.listen(8080);
