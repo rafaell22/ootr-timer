@@ -5,12 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
          </style>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.css">
+        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.css">-->
+        <link rel="icon" href="./assets/clock.png">
         <link rel="stylesheet" href="./styles/main.css">
     </head>
     <body>
-      <script src="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.js"
-    ></script>
+        <!--this library helps to debug when developping using a mobile device-->
+        <!--<script src="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.js"></script>-->
+      <p id="race-category"></p>
+      <p id="race-name"></p>
       <div id="timer">
         <div id="time-container">
           <span id="hours">00</span>
@@ -26,6 +29,20 @@
         <input type="button" value="RESET" id="btnReset" class="hidden" />
         <input type="button" value="RACETIME" id="btnJoin" />
 
+
+      </div>
+
+      <div id="racetime-dialog" class="hidden above-overlay-1">
+        <select id="selectCategory" class="hidden"></select>
+        <select id="selectRace" class="hidden"></select>
+        <input type="button" value="SELECT" id="btnSelectRace" class="hidden" />
+      </div>
+      <div id="dialog-overlay" class="overlay hidden layer-overlay"></div>
+      <div id="loader" class="overlay hidden layer-loader">
+        <span class="loader"></span>
+      </div>
+
+      <div id="settings-dialog" class="hidden above-overlay-1">
         <div class="row">
           <input type="checkbox" value="false" id="ckCustomStartTime" />
           <label>Custom Start Time</label>
@@ -37,17 +54,15 @@
           <input type="checkbox" value="false" id="ckSound" />
           <label>Countdown Sound</label>
         </div>
-
       </div>
 
-      <div id="racetimeDialog" class="hidden above-overlay-1">
-        <select id="selectCategory" class="hidden"></select>
-        <select id="selectRace" class="hidden"></select>
-        <input type="button" value="SELECT" id="btnSelectRace" class="hidden" />
-      </div>
-      <div id="dialog-overlay" class="overlay hidden layer-overlay"></div>
-      <div id="loader" class="overlay hidden layer-loader">
-        <span class="loader"></span>
+      <div id="footer">
+          <div id="settings">
+              <img src="./assets/gear.png" />
+          </div>
+          <div id="open-window">
+              <img src="./assets/openWindow.png" />
+          </div>
       </div>
 
       <audio src="./assets/countdown.wav"></audio>

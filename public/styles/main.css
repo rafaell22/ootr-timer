@@ -1,3 +1,11 @@
+:root {
+    --primary-color: #0d9263;
+    --secondary-color: #d4ce46;
+    --highlights-color: #4aba91;
+    --shadows-color: #0e5135;
+    --background-color: #494b4b;
+}
+
 @font-face {
     font-family: 'triforcetriforce';
     src: url('../assets/triforce-webfont.woff2') format('woff2'),
@@ -40,13 +48,12 @@
  */
 
 body {
-  background-color: #494b4b;
+  background-color: var(--background-color);
   margin: 0;
 }
 
 input[type="text"] {
-  width: 95vw;
-  min-width: 200px;
+  width: 300px;
   height: 50px;
   font-size: 24px;
   margin: auto;
@@ -54,28 +61,28 @@ input[type="text"] {
 
 input[type="button"] {
     display: block;
-    width: 95vw;
+    width: 95%;
     min-width: 200px;
     height: 80px;
     text-align: center;
     font-size: 32px;
-    background-color: #0d9263;
-    color: #d4ce46;
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
     font-weight: bold;
-    border-top-color: #4aba91;
-    border-left-color: #4aba91;
-    border-right-color: #0e5135;
-    border-bottom-color: #0e5135;
+    border-top-color: var(--highlights-color);
+    border-left-color: var(--highlights-color);
+    border-right-color: var(--shadows-color);
+    border-bottom-color: var(--shadows-color);
     border-radius: 10px;
     margin: auto auto 15px auto;
 }
 
 input[type="button"]:hover {
-    background-color: #4aba91;
+    background-color: var(--highlights-color);
 }
 
 input[type="button"]:active {
-    background-color: #0e5135;
+    background-color: var(--shadows-color);
 }
 
 input[type="checkbox"] {
@@ -88,7 +95,20 @@ input[type="checkbox"] {
 input[type="checkbox"] + label {
   display: inline-block;
   line-height: 28px;
-  color: #4aba91;
+}
+
+#race-category, #race-name {
+    margin-left: 20px;
+    color: var(--secondary-color);
+}
+
+#race-category {
+    font-size: 24px;
+    font-family: 'triforcetriforce';
+}
+
+#race-name {
+    font-size: 12px;
 }
 
 #time-container {
@@ -98,20 +118,19 @@ input[type="checkbox"] + label {
     font-family: 'triforcetriforce';
     font-size: 50px;
     overflow-y: hidden;
-    color: #d4ce46;
+    color: var(--secondary-color);
     position: relative;
     left: 50%;
     transform: translate(-50%, 0);
 }
 
 #timer {
-  position: absolute;
-  top: 200px;
+  position: relative;
   left: 50%;
   transform: translate(-50%, -0);
 }
 
-#racetimeDialog {
+#racetime-dialog, #settings-dialog {
   background-color: #d9d9d9;
   border-radius: 5px;
   box-shadow: 4px 4px 0 0 4px;
@@ -122,17 +141,22 @@ input[type="checkbox"] + label {
   padding: 10px;
   min-width: 300px;
   box-shadow: 3px 3px 15px 0px #333333;
+  color: black;
 }
 
-#racetimeDialog select {
+#racetime-dialog select {
   width: 100%;
   height: 50px;
   font-size: 24px;
   margin-bottom: 15px;
 }
 
-#racetimeDialog input[type="button"] {
+#racetime-dialog input[type="button"] {
   width: 100%;
+}
+
+#settings-dialog {
+  width: 350px;
 }
 
 .overlay {
@@ -149,7 +173,7 @@ input[type="checkbox"] + label {
   width: 48px;
   height: 48px;
   border: 5px solid #FFF;
-  border-bottom-color: #FF3D00;
+  border-bottom-color: var(--primary-color);
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
@@ -167,4 +191,18 @@ input[type="checkbox"] + label {
   100% {
       transform: rotate(360deg);
   }
-}        
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 48px;
+    background-color: var(--primary-color);
+    padding: 5px;
+}
+
+#footer>div {
+    float: right;
+    margin-right: 10px;
+}
