@@ -79,7 +79,7 @@ export default class Race {
    * Load all races details
    * @param {string} raceUrl
    *
-   * @returns {Promise<object[]>}
+   * @returns {Promise<object>}
    */
   static async loadRaceDetails(raceUrl) {
     let raceDetailsResult;

@@ -7,7 +7,6 @@ import TIMER_STATES from '../TIMER_STATES.js';
 const start = function() {
   this.direction = 1;
   this.prevTimestamp = null;
-  this.value = 0
 }
 
 const pause = function() {
