@@ -1,5 +1,6 @@
 // @ts-check
 import { show, hide } from './domUtils.js';
+import { setTimer } from './timer.js';
 
 const timerSettings = {
     dialog: document.getElementById('settings-dialog'),
@@ -13,14 +14,16 @@ dialogOverlay?.addEventListener('click', function closeRacetimeDialog() {
     hide(timerSettings.dialog);
 });
 
-timerSettings.customStartTime?.addEventListener('change', function toggleCustomStartTimeInput() {
-    console.log('here?')
-    if(timerSettings.customStartTime?.['checked']) {
-        show(timerSettings.timerStartValue?.parentElement)
-    } else {
-        hide(timerSettings.timerStartValue?.parentElement);
-    }
-});
+export function initSettings() {
+    timerSettings.customStartTime?.addEventListener('change', function toggleCustomStartTimeInput() {
+        if(timerSettings.customStartTime?.['checked']) {
+            show(timerSettings.timerStartValue?.parentElement)
+        } else {
+            hide(timerSettings.timerStartValue?.parentElement);
+        }
+    });
+}
+
 
 export function getStartTime() {
     const startValue = +(timerSettings.timerStartValue?.['value'] ?? 0);
@@ -29,6 +32,25 @@ export function getStartTime() {
     }
 
     return startValue
+}
+
+export function getStartTimeInMilliseconds() {
+    return getStartTime() * 1000;
+}
+
+/**
+ * @param {number} startTime - start time in milliseconds
+ */
+export function setStartTime(startTime) {
+    if(timerSettings.timerStartValue) {
+        timerSettings.timerStartValue['value'] = startTime / 1000;
+        show(timerSettings.timerStartValue?.parentElement);
+    }
+    if(timerSettings.customStartTime) {
+        timerSettings.customStartTime['checked'] = true;
+    }
+    
+    setTimer(startTime);
 }
 
 export function showSettings() {

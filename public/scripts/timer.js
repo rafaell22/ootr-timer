@@ -2,7 +2,6 @@
 import Timer from './classes/Timer.js';
 import TIMER_STATES from './TIMER_STATES.js';
 import { hide, show } from './domUtils.js';
-import { getStartTime } from './settings.js';
 
 const timer = new Timer();
 const timerDisplay = {
@@ -10,6 +9,7 @@ const timerDisplay = {
     minutes: document.getElementById('minutes'),
     seconds: document.getElementById('seconds'),
     milliseconds: document.getElementById('milliseconds'),
+    sign: document.getElementById('sign'),
 }
 
 const timerButtons = {
@@ -18,10 +18,13 @@ const timerButtons = {
     reset : document.getElementById('btnReset'),
 }
 
-/**
- * @param {number} value
- */
-const updateTimerDisplay = function(value) {
+export function updateTimerDisplay() {
+    const value = timer.value;
+    if(value < 0) {
+        show(timerDisplay.sign);
+    } else {
+        hide(timerDisplay.sign);
+    }
     const minutes =  Math.floor(Math.abs(value) / 1000 / 60) % 60;
     const seconds = Math.floor(Math.abs(value) / 1000) % 60;
     const milliseconds = Math.floor(Math.abs(value) % 1000);
@@ -43,19 +46,15 @@ let animationFrame;
  */
 const update = (timestamp) => {
     timer.update(timestamp);
-    updateTimerDisplay(timer.value);
+    updateTimerDisplay();
     animationFrame = requestAnimationFrame(update);
 };
 
-/**
- * @param {number} timerStartValue
- */
-function startTimer(timerStartValue) {
+export function startTimer() {
     if(timer.is(TIMER_STATES.PAUSED)) {
         timer['resume']();
     } else {
         timer['start']();
-        timer.value = timerStartValue;
     }
 
     animationFrame = requestAnimationFrame(update);
@@ -77,7 +76,7 @@ function pauseTimer() {
 
 function resetTimer() {
     timer['reset']();
-    updateTimerDisplay(0);
+    updateTimerDisplay();
 
     show(timerButtons.start);
     hide(timerButtons.reset);
@@ -85,10 +84,21 @@ function resetTimer() {
     show(timerButtons.racetime);
 }
 
-timerButtons.start?.addEventListener('click', () => {
-    startTimer(getStartTime());
-});
+/**
+ * @param {number} timerValue
+ */
+export function setTimer(timerValue) {
+    timer.value = timerValue;
+    updateTimerDisplay()
+}
 
-timerButtons.pause?.addEventListener('click', pauseTimer);
+export function initTimerEvents() {
+    timerButtons.start?.addEventListener('click', () => {
+        startTimer();
+    });
 
-timerButtons.reset?.addEventListener('click', resetTimer);
+    timerButtons.pause?.addEventListener('click', pauseTimer);
+
+    timerButtons.reset?.addEventListener('click', resetTimer);
+}
+

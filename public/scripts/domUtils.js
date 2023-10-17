@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * @param {HTMLElement|null|undefined} el
+ * @param {Element|HTMLElement|null|undefined} el
  */
 export function hide(el) {
     if(!el) { return }
@@ -8,7 +8,7 @@ export function hide(el) {
 }
 
 /**
- * @param {HTMLElement|null|undefined} el
+ * @param {Element|HTMLElement|null|undefined} el
  */
 export function show(el) {
     if(!el) { return }
