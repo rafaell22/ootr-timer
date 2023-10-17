@@ -24,6 +24,7 @@ app.get('/races/details/:category/:raceSlug/data', async function getRaceDetails
         url: `https://racetime.gg/${req.params.category}/${req.params.raceSlug}/data`
     })
 
+    response.data.date_exact = response.headers['x-date-exact'];
     res.send(response.data);
   } catch(error) {
     console.log('ERROR!')

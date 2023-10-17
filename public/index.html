@@ -12,10 +12,11 @@
     <body>
         <!--this library helps to debug when developping using a mobile device-->
         <!--<script src="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.js"></script>-->
-      <p id="race-category"></p>
-      <p id="race-name"></p>
+      <p id="race-category" class="full-view"></p>
+      <p id="race-name" class="full-view"></p>
       <div id="timer">
         <div id="time-container">
+          <span id="sign" class="hidden">-</span>
           <span id="hours">00</span>
           :
           <span id="minutes">00</span>
@@ -27,7 +28,7 @@
         <input type="button" value="START" id="btnStart" />
         <input type="button" value="PAUSE" id="btnPause" class="hidden" />
         <input type="button" value="RESET" id="btnReset" class="hidden" />
-        <input type="button" value="RACETIME" id="btnJoin" />
+        <input type="button" value="RACETIME" id="btnJoin" class="full-view" />
 
 
       </div>
@@ -43,6 +44,7 @@
       </div>
 
       <div id="settings-dialog" class="hidden above-overlay-1">
+        <p>Start Time</p>
         <div class="row">
           <input type="checkbox" value="false" id="ckCustomStartTime" />
           <label>Custom Start Time</label>
@@ -54,9 +56,12 @@
           <input type="checkbox" value="false" id="ckSound" />
           <label>Countdown Sound</label>
         </div>
+        <p>Colors</p>
+        <p>Text Format</p>
+        <p>Audio</p>
       </div>
 
-      <div id="footer">
+      <div id="footer" class="full-view">
           <div id="settings">
               <img src="./assets/gear.png" />
           </div>
