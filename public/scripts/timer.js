@@ -59,29 +59,36 @@ export function startTimer() {
 
     animationFrame = requestAnimationFrame(update);
 
-    hide(timerButtons.start);
-    hide(timerButtons.reset);
-    show(timerButtons.pause);
-    hide(timerButtons.racetime);
+    if(!timerButtons.start.classList.contains('hidden')) {
+        hide(timerButtons.start);
+        hide(timerButtons.reset);
+        show(timerButtons.pause);
+        hide(timerButtons.racetime);
+    }
 }
 
 function pauseTimer() {
     timer['pause']();
 
     cancelAnimationFrame(animationFrame);
-    show(timerButtons.start);
-    show(timerButtons.reset);
-    hide(timerButtons.pause);
+
+    if(!timerButtons.pause.classList.contains('hidden')) {
+        show(timerButtons.start);
+        show(timerButtons.reset);
+        hide(timerButtons.pause);
+    }
 }
 
 function resetTimer() {
     timer['reset']();
     updateTimerDisplay();
 
-    show(timerButtons.start);
-    hide(timerButtons.reset);
-    hide(timerButtons.pause);
-    show(timerButtons.racetime);
+    if(!timerButtons.reset.classList.contains('hidden')) {
+        show(timerButtons.start);
+        hide(timerButtons.reset);
+        hide(timerButtons.pause);
+        show(timerButtons.racetime);
+    }
 }
 
 /**
@@ -100,9 +107,7 @@ export function initTimerEvents({ start }) {
         setTimer(start);
     }
 
-    timerButtons.start?.addEventListener('click', () => {
-        startTimer();
-    });
+    timerButtons.start?.addEventListener('click', startTimer);
 
     timerButtons.pause?.addEventListener('click', pauseTimer);
 
