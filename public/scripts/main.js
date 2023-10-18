@@ -1,6 +1,5 @@
 // @ts-check
-import { setPageColors } from './pageColors.js';
-import { initSettings } from './settings.js';
+import { initSettings, updateColorSettings } from './settings.js';
 import { initTimerEvents } from './timer.js';
 import { initRacetimeEvents } from './racetime.js';
 import { initFooter } from './footer.js'
@@ -8,8 +7,9 @@ import { setViewMode } from './viewMode.js';
 
 const urlSearchParamsAsText = window.location.search;
 const urlSearchParams = new URLSearchParams(urlSearchParamsAsText);
+console.log('urlSearchParams', urlSearchParams);
 
-setPageColors({
+updateColorSettings({
     primary: urlSearchParams.get('primary'),
     secondary: urlSearchParams.get('secondary'),
     highlights: urlSearchParams.get('highlights'),
@@ -17,8 +17,13 @@ setPageColors({
     background: urlSearchParams.get('background'),
 });
 initSettings();
-initTimerEvents();
-initRacetimeEvents();
+initTimerEvents({
+    start: urlSearchParams.get('start'),
+});
+initRacetimeEvents({
+    category: urlSearchParams.get('category'),
+    race: urlSearchParams.get('race'),
+});
 initFooter();
 
 setViewMode(urlSearchParams.get('bare') === 'true' ? true : false);

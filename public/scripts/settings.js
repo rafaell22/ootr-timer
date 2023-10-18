@@ -1,12 +1,21 @@
 // @ts-check
 import { show, hide } from './domUtils.js';
+import { setPageColors } from './pageColors.js';
 import { setTimer } from './timer.js';
 
 const timerSettings = {
     dialog: document.getElementById('settings-dialog'),
     customStartTime : document.getElementById('ckCustomStartTime'),
     timerStartValue : document.getElementById('txtTimerStart'),
-}
+};
+
+const colorSettings = {
+    primary: document.getElementById('primaryColor'),
+    secondary: document.getElementById('secondaryColor'),
+    highlights: document.getElementById('highlightsColor'),
+    shadows: document.getElementById('shadowsColor'),
+    background: document.getElementById('backgroundColor'),
+};
 
 const dialogOverlay = document.getElementById('dialog-overlay');
 dialogOverlay?.addEventListener('click', function closeRacetimeDialog() {
@@ -22,8 +31,23 @@ export function initSettings() {
             hide(timerSettings.timerStartValue?.parentElement);
         }
     });
-}
 
+    colorSettings.primary?.addEventListener('change', function changePrimaryColor() {
+        setPageColors({
+            primary: colorSettings.primary['value'],
+            secondary: colorSettings.secondary['value'],
+            highlights: colorSettings.highlights['value'],
+            shadows: colorSettings.shadows['value'],
+            background: colorSettings.background['value'],
+        });
+    });
+
+    colorSettings.primary?.addEventListener('change', changeColor);
+    colorSettings.secondary?.addEventListener('change', changeColor);
+    colorSettings.highlights?.addEventListener('change', changeColor);
+    colorSettings.shadows?.addEventListener('change', changeColor);
+    colorSettings.background?.addEventListener('change', changeColor);
+}
 
 export function getStartTime() {
     const startValue = +(timerSettings.timerStartValue?.['value'] ?? 0);
@@ -58,3 +82,50 @@ export function showSettings() {
     show(timerSettings.dialog);
 }
 
+const DEFAULT_COLORS = {
+    primary: '#0d9263',
+    secondary: '#d4ce46',
+    highlights: '#4aba91',
+    shadows: '#0e5135',
+    background: '#494b4b',
+};
+
+/**
+ * @param {object} colors
+ * @param {string|null} colors.primary
+ * @param {string|null} colors.secondary
+ * @param {string|null} colors.highlights
+ * @param {string|null} colors.shadows
+ * @param {string|null} colors.background
+ */
+export function updateColorSettings(colors) {
+    const primaryColor = colors.primary ?? DEFAULT_COLORS.primary;
+    const secondaryColor = colors.secondary ?? DEFAULT_COLORS.secondary;
+    const highlightsColor = colors.highlights ?? DEFAULT_COLORS.highlights;
+    const shadowsColor = colors.shadows ?? DEFAULT_COLORS.shadows;
+    const backgroundColor = colors.background ?? DEFAULT_COLORS.background;
+
+    colorSettings.primary['value'] = primaryColor;
+    colorSettings.secondary['value'] = secondaryColor;
+    colorSettings.highlights['value'] = highlightsColor;
+    colorSettings.shadows['value'] = shadowsColor;
+    colorSettings.background['value'] = backgroundColor;  
+
+    setPageColors({
+        primary: primaryColor,
+        secondary: secondaryColor,
+        highlights: highlightsColor,
+        shadows: shadowsColor,
+        background: backgroundColor,
+    });
+}
+
+function changeColor() {
+    updateColorSettings({
+        primary: colorSettings.primary['value'],
+        secondary: colorSettings.secondary['value'],
+        highlights: colorSettings.highlights['value'],
+        shadows: colorSettings.shadows['value'],
+        background: colorSettings.background['value'],
+    });
+}

@@ -24,5 +24,5 @@ export function setViewMode(isBareView) {
         return;
     }
 
-    window.resizeTo(450, 300);
+    window.resizeTo(450, 100);
 }

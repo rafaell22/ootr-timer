@@ -18,7 +18,7 @@ const timerButtons = {
     reset : document.getElementById('btnReset'),
 }
 
-export function updateTimerDisplay() {
+function updateTimerDisplay() {
     const value = timer.value;
     if(value < 0) {
         show(timerDisplay.sign);
@@ -92,7 +92,14 @@ export function setTimer(timerValue) {
     updateTimerDisplay()
 }
 
-export function initTimerEvents() {
+/*
+ * @param {number|null|undefined} startTimerValue
+ */
+export function initTimerEvents({ start }) {
+    if(start) {
+        setTimer(start);
+    }
+
     timerButtons.start?.addEventListener('click', () => {
         startTimer();
     });

@@ -27,8 +27,22 @@ const raceInformation = {
 
 let races;
 let categories;
+let selectedCategory;
+let selectedRace;
 
-export function initRacetimeEvents() {
+/**
+ * @param {object} initialValues
+ * @param {string} initialValues.category
+ * @param {string} initialValues.race
+ */
+export function initRacetimeEvents({ category, race }) {
+    console.log(category, race);
+    if(category && race) {
+        selectedCategory = { slug: category };
+        selectedRace = { name: category + '/' + race };
+        checkForRaceStart();
+    }
+
     racetimeButton?.addEventListener('click', async function openRacetimeDialog() {
         show(loader);
         try {
@@ -61,7 +75,6 @@ export function initRacetimeEvents() {
         }
     });
 
-    let selectedCategory;
     racetime.selectCategory?.addEventListener('change', async function loadRaces(event) {
         show(loader);
         const categorySlug = event.target?.['value'];
@@ -89,7 +102,6 @@ export function initRacetimeEvents() {
         }
     });
 
-    let selectedRace;
     racetime.selectButton?.addEventListener('click', async function selectRace() {
         show(loader);
         hide(dialogOverlay);
@@ -138,3 +150,10 @@ export function initRacetimeEvents() {
     }
 }
 
+export function getSelectedCategory() {
+    return selectedCategory;
+}
+
+export function getSelectedRace() {
+    return selectedRace;
+}

@@ -33,6 +33,7 @@
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
+    padding-left: 10px !important;
 }
 
 /*
@@ -174,6 +175,10 @@ input[type="checkbox"] + label {
     border-bottom: 1px solid var(--shadows-color);
     margin-top: 10px;
     margin-bottom: 5px;
+}
+
+#settings-dialog label, #settings-dialog input {
+    margin-left: 5px;
 }
 
 .overlay {

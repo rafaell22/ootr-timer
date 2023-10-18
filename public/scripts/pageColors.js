@@ -1,11 +1,4 @@
 // @ts-check
-const DEFAULT_COLORS = {
-    primary: '#0d9263',
-    secondary: '#d4ce46',
-    highlights: '#4aba91',
-    shadows: '#0e5135',
-    background: '#494b4b',
-};
 
 /**
  * @param {object} colors
@@ -16,15 +9,19 @@ const DEFAULT_COLORS = {
  * @param {string|null} colors.background
  */
 export function setPageColors(colors) {
-    const primaryColor = colors.primary ?? DEFAULT_COLORS.primary;
-    const secondaryColor = colors.secondary ?? DEFAULT_COLORS.secondary;
-    const highlightsColor = colors.highlights ?? DEFAULT_COLORS.highlights;
-    const shadowsColor = colors.shadows ?? DEFAULT_COLORS.shadows;
-    const backgroundColor = colors.background ?? DEFAULT_COLORS.background;
+    document.documentElement.style.setProperty('--primary-color', colors.primary);
+    document.documentElement.style.setProperty('--secondary-color', colors.secondary);
+    document.documentElement.style.setProperty('--highlights-color', colors.highlights);
+    document.documentElement.style.setProperty('--shadows-color', colors.shadows);
+    document.documentElement.style.setProperty('--background-color', colors.background);
+}
 
-    document.documentElement.style.setProperty('--primary-color', primaryColor);
-    document.documentElement.style.setProperty('--secondary-color', secondaryColor);
-    document.documentElement.style.setProperty('--highlights-color', highlightsColor);
-    document.documentElement.style.setProperty('--shadows-color', shadowsColor);
-    document.documentElement.style.setProperty('--background-color', backgroundColor);
+export function getPageColors() {
+    return {
+        primary: document.documentElement.style.getPropertyValue('--primary-color'),
+        secondary: document.documentElement.style.getPropertyValue('--secondary-color'),
+        highlights: document.documentElement.style.getPropertyValue('--highlights-color'),
+        shadows: document.documentElement.style.getPropertyValue('--shadows-color'),
+        background: document.documentElement.style.getPropertyValue('--background-color'),
+    };
 }
