@@ -1,13 +1,16 @@
 // @ts-check
+import Timer from './classes/Timer.js';
+
 import { initSettings, updateColorSettings } from './settings.js';
 import { initTimerEvents } from './timer.js';
 import { initRacetimeEvents } from './racetime.js';
 import { initFooter } from './footer.js'
 import { setViewMode } from './viewMode.js';
 
+const timer = new Timer();
+
 const urlSearchParamsAsText = window.location.search;
 const urlSearchParams = new URLSearchParams(urlSearchParamsAsText);
-console.log('urlSearchParams', urlSearchParams);
 
 updateColorSettings({
     primary: urlSearchParams.get('primary'),

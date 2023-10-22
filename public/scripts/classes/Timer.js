@@ -7,10 +7,13 @@ import TIMER_STATES from '../TIMER_STATES.js';
 const start = function() {
   this.direction = 1;
   this.prevTimestamp = null;
+
+  this.#animationFrame = requestAnimationFrame(this.update);
 }
 
 const pause = function() {
   this.prevTimestamp = null;
+  cancelAnimationFrame(this.#animationFrame);
 }
 
 const reset = function() {
@@ -20,6 +23,7 @@ const reset = function() {
 }
 
 class Timer extends Fsm {
+  #animationFrame;
   constructor() {
     super(
       [TIMER_STATES.IDLE, TIMER_STATES.RUNNING, TIMER_STATES.PAUSED],
@@ -31,6 +35,7 @@ class Timer extends Fsm {
     this.value = 0;
     this.prevTimestamp = null;
     this.direction = 1;
+    this.#animationFrame = null;
   }
 
   static transitions = [
@@ -70,6 +75,23 @@ class Timer extends Fsm {
     );
     this.prevTimestamp = timestamp;
   };
+
+  hours() {
+    return Math.floor(Math.abs(this.value) / 1000 / 60 / 60) % 60;
+  }
+
+  minutes() {
+    return Math.floor(Math.abs(this.value) / 1000 / 60) % 60;
+  }
+
+  seconds() {
+    return Math.floor(Math.abs(this.value) / 1000) % 60;
+  }
+
+  milliseconds() {
+    return Math.floor(Math.abs(this.value) % 1000);
+  }
+  
 }
 
 export default Timer;
