@@ -32,8 +32,8 @@ let selectedRace;
 
 /**
  * @param {object} initialValues
- * @param {string} initialValues.category
- * @param {string} initialValues.race
+ * @param {string|null} initialValues.category
+ * @param {string|null} initialValues.race
  */
 export function initRacetimeEvents({ category, race }) {
     console.log(category, race);

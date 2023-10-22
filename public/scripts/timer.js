@@ -10,6 +10,7 @@ const timerDisplay = {
     seconds: document.getElementById('seconds'),
     milliseconds: document.getElementById('milliseconds'),
     sign: document.getElementById('sign'),
+    container: document.getElementById('time-container'),
 }
 
 const timerButtons = {
@@ -25,6 +26,7 @@ function updateTimerDisplay() {
     } else {
         hide(timerDisplay.sign);
     }
+    const hours = Math.floor(Math.abs(value) / 1000 / 60 / 60) % 60;
     const minutes =  Math.floor(Math.abs(value) / 1000 / 60) % 60;
     const seconds = Math.floor(Math.abs(value) / 1000) % 60;
     const milliseconds = Math.floor(Math.abs(value) % 1000);
@@ -59,7 +61,7 @@ export function startTimer() {
 
     animationFrame = requestAnimationFrame(update);
 
-    if(!timerButtons.start.classList.contains('hidden')) {
+    if(!timerButtons.start?.classList.contains('hidden')) {
         hide(timerButtons.start);
         hide(timerButtons.reset);
         show(timerButtons.pause);
@@ -83,7 +85,7 @@ function resetTimer() {
     timer['reset']();
     updateTimerDisplay();
 
-    if(!timerButtons.reset.classList.contains('hidden')) {
+    if(!timerButtons.reset?.classList.contains('hidden')) {
         show(timerButtons.start);
         hide(timerButtons.reset);
         hide(timerButtons.pause);
@@ -112,5 +114,56 @@ export function initTimerEvents({ start }) {
     timerButtons.pause?.addEventListener('click', pauseTimer);
 
     timerButtons.reset?.addEventListener('click', resetTimer);
+
+    timerDisplay.container?.addEventListener('mouseup', checkForLongClick);
+    timerDisplay.container?.addEventListener('mousedown', checkForLongClick);
+    timerDisplay.container?.addEventListener('touchstart', checkForLongClick);
+    timerDisplay.container?.addEventListener('touchend', checkForLongClick);
+
+    timerDisplay.container?.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    })
 }
 
+let timeOfClick = 0;
+const longClickThreshold = 1000;
+function checkForLongClick(e) {
+    console.log('event: ', e.target);
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    e.preventDefault();
+    if(timeOfClick === 0) {
+        timeOfClick = performance.now();;
+        return;
+    }
+
+    const timeOfRelease = performance.now();
+    console.log('timeOfClick: ', timeOfClick)
+    console.log('timeOfRelease: ', timeOfRelease)
+    console.log(timeOfRelease - timeOfClick)
+    console.log(longClickThreshold)
+    console.log((timeOfRelease - timeOfClick) > longClickThreshold)
+    if((timeOfRelease - timeOfClick) > longClickThreshold) {
+        resetTimer();
+    } else {
+        console.log(timer.state)
+        console.log(timer.can('start'))
+        console.log(timer.can('pause'))
+        console.log(timer.can('resume'))
+        if(
+            timer.can('start') ||
+            timer.can('resume')
+        ) {
+            startTimer();
+            return;
+        }
+
+        if(
+            timer.can('pause')
+        ) {
+            pauseTimer();
+            return;
+        }
+    }
+    timeOfClick = 0;
+}

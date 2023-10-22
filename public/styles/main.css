@@ -36,6 +36,11 @@
     padding-left: 10px !important;
 }
 
+.unselectable {
+    webkit-user-select: none; /* Safari */
+    user-select: none;
+}
+
 /*
  * START - Height Layers
  * lower the number, lower the element
