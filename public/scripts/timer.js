@@ -31,6 +31,9 @@ function updateTimerDisplay() {
     const seconds = Math.floor(Math.abs(value) / 1000) % 60;
     const milliseconds = Math.floor(Math.abs(value) % 1000);
 
+    if(timerDisplay?.hours) {
+        timerDisplay.hours.textContent = ( minutes < 10 ? '0' : '' ) + hours;
+    }
     if(timerDisplay?.minutes) {
         timerDisplay.minutes.textContent = ( minutes < 10 ? '0' : '' ) + minutes;
     }
@@ -60,6 +63,7 @@ export function startTimer() {
     }
 
     animationFrame = requestAnimationFrame(update);
+    console.log('startTimer/animationFrame: ', animationFrame);
 
     if(!timerButtons.start?.classList.contains('hidden')) {
         hide(timerButtons.start);
@@ -72,9 +76,10 @@ export function startTimer() {
 function pauseTimer() {
     timer['pause']();
 
+    console.log('pauseTimer/animationFrame: ', animationFrame)
     cancelAnimationFrame(animationFrame);
 
-    if(!timerButtons.pause.classList.contains('hidden')) {
+    if(!timerButtons.pause?.classList.contains('hidden')) {
         show(timerButtons.start);
         show(timerButtons.reset);
         hide(timerButtons.pause);
@@ -126,44 +131,32 @@ export function initTimerEvents({ start }) {
 }
 
 let timeOfClick = 0;
-const longClickThreshold = 1000;
+let longClickTimer;
+const LONG_CLICK_THRESHOLD = 1000;
 function checkForLongClick(e) {
-    console.log('event: ', e.target);
     e.stopPropagation();
     e.stopImmediatePropagation();
     e.preventDefault();
     if(timeOfClick === 0) {
-        timeOfClick = performance.now();;
+        timeOfClick = performance.now();
+        longClickTimer = setTimeout(() => {
+            resetTimer();
+            timeOfClick = 0;
+        }, LONG_CLICK_THRESHOLD);
         return;
     }
 
-    const timeOfRelease = performance.now();
-    console.log('timeOfClick: ', timeOfClick)
-    console.log('timeOfRelease: ', timeOfRelease)
-    console.log(timeOfRelease - timeOfClick)
-    console.log(longClickThreshold)
-    console.log((timeOfRelease - timeOfClick) > longClickThreshold)
-    if((timeOfRelease - timeOfClick) > longClickThreshold) {
-        resetTimer();
-    } else {
-        console.log(timer.state)
-        console.log(timer.can('start'))
-        console.log(timer.can('pause'))
-        console.log(timer.can('resume'))
-        if(
-            timer.can('start') ||
-            timer.can('resume')
-        ) {
-            startTimer();
-            return;
-        }
+    clearTimeout(longClickTimer);
 
-        if(
-            timer.can('pause')
-        ) {
-            pauseTimer();
-            return;
-        }
+    if(
+        timer.can('start') ||
+        timer.can('resume')
+    ) {
+        startTimer();
+    } else if(
+        timer.can('pause')
+    ) {
+        pauseTimer();
     }
     timeOfClick = 0;
 }
