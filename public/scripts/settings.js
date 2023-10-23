@@ -1,7 +1,7 @@
 // @ts-check
 import { show, hide } from './domUtils.js';
 import { setPageColors } from './pageColors.js';
-import { setTimer } from './timer.js';
+import Timer from './classes/Timer.js';
 
 const timerSettings = {
     dialog: document.getElementById('settings-dialog'),
@@ -23,7 +23,13 @@ dialogOverlay?.addEventListener('click', function closeRacetimeDialog() {
     hide(timerSettings.dialog);
 });
 
-export function initSettings() {
+let timerRef;
+/**
+ * @param {object} options
+ * @param {Timer} options.timer
+ */
+export function initSettings({ timer }) {
+    timerRef = timer;
     timerSettings.customStartTime?.addEventListener('change', function toggleCustomStartTimeInput() {
         if(timerSettings.customStartTime?.['checked']) {
             show(timerSettings.timerStartValue?.parentElement)
@@ -34,11 +40,11 @@ export function initSettings() {
 
     colorSettings.primary?.addEventListener('change', function changePrimaryColor() {
         setPageColors({
-            primary: colorSettings.primary['value'],
-            secondary: colorSettings.secondary['value'],
-            highlights: colorSettings.highlights['value'],
-            shadows: colorSettings.shadows['value'],
-            background: colorSettings.background['value'],
+            primary: colorSettings.primary?.['value'],
+            secondary: colorSettings.secondary?.['value'],
+            highlights: colorSettings.highlights?.['value'],
+            shadows: colorSettings.shadows?.['value'],
+            background: colorSettings.background?.['value'],
         });
     });
 
@@ -73,8 +79,8 @@ export function setStartTime(startTime) {
     if(timerSettings.customStartTime) {
         timerSettings.customStartTime['checked'] = true;
     }
-    
-    setTimer(startTime);
+
+    timerRef.setTimer(startTime);
 }
 
 export function showSettings() {
@@ -105,11 +111,21 @@ export function updateColorSettings(colors) {
     const shadowsColor = colors.shadows ?? DEFAULT_COLORS.shadows;
     const backgroundColor = colors.background ?? DEFAULT_COLORS.background;
 
-    colorSettings.primary['value'] = primaryColor;
-    colorSettings.secondary['value'] = secondaryColor;
-    colorSettings.highlights['value'] = highlightsColor;
-    colorSettings.shadows['value'] = shadowsColor;
-    colorSettings.background['value'] = backgroundColor;  
+    if(colorSettings.primary) {
+        colorSettings.primary['value'] = primaryColor;
+    }
+    if(colorSettings.secondary) {
+        colorSettings.secondary['value'] = secondaryColor;
+    }
+    if(colorSettings.highlights) {
+        colorSettings.highlights['value'] = highlightsColor;
+    }
+    if(colorSettings.shadows) {
+        colorSettings.shadows['value'] = shadowsColor;
+    }
+    if(colorSettings.background) {
+        colorSettings.background['value'] = backgroundColor;
+    }
 
     setPageColors({
         primary: primaryColor,
@@ -122,10 +138,12 @@ export function updateColorSettings(colors) {
 
 function changeColor() {
     updateColorSettings({
-        primary: colorSettings.primary['value'],
-        secondary: colorSettings.secondary['value'],
-        highlights: colorSettings.highlights['value'],
-        shadows: colorSettings.shadows['value'],
-        background: colorSettings.background['value'],
+        primary: colorSettings.primary?.['value'],
+        secondary: colorSettings.secondary?.['value'],
+        highlights: colorSettings.highlights?.['value'],
+        shadows: colorSettings.shadows?.['value'],
+        background: colorSettings.background?.['value'],
     });
 }
+
+

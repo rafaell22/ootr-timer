@@ -2,7 +2,8 @@
 import Timer from './classes/Timer.js';
 
 import { initSettings, updateColorSettings } from './settings.js';
-import { initTimerEvents } from './timer.js';
+import { initTimerButtons } from './timerButtons.js';
+import { initTimerDisplay } from './timerDisplay.js';
 import { initRacetimeEvents } from './racetime.js';
 import { initFooter } from './footer.js'
 import { setViewMode } from './viewMode.js';
@@ -12,6 +13,17 @@ const timer = new Timer();
 const urlSearchParamsAsText = window.location.search;
 const urlSearchParams = new URLSearchParams(urlSearchParamsAsText);
 
+initSettings({ timer });
+initTimerDisplay({ timer });
+initTimerButtons({ timer });
+initFooter();
+initRacetimeEvents({
+    category: urlSearchParams.get('category'),
+    race: urlSearchParams.get('race'),
+    timer,
+});
+
+
 updateColorSettings({
     primary: urlSearchParams.get('primary'),
     secondary: urlSearchParams.get('secondary'),
@@ -19,22 +31,17 @@ updateColorSettings({
     shadows: urlSearchParams.get('shadows'),
     background: urlSearchParams.get('background'),
 });
-initSettings();
-initTimerEvents({
-    start: urlSearchParams.get('start'),
-});
-initRacetimeEvents({
-    category: urlSearchParams.get('category'),
-    race: urlSearchParams.get('race'),
-});
-initFooter();
 
 setViewMode(urlSearchParams.get('bare') === 'true' ? true : false);
 
-const elReferences = {};
-elReferences.audio = document.querySelector('audio');
-
-
+/*
+ * *
+ * *
+ *const elReferences = {};
+ *elReferences.audio = document.querySelector('audio');
+ *
+ *
+ */
 
 let countdownAudio;
 

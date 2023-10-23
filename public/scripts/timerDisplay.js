@@ -1,3 +1,6 @@
+//@ts-check
+import { hide, show } from './domUtils.js';
+
 const timerDisplay = {
     hours: document.getElementById('hours'),
     minutes: document.getElementById('minutes'),
@@ -7,17 +10,38 @@ const timerDisplay = {
     container: document.getElementById('time-container'),
 }
 
+let timerRef;
+/*
+ * @param {object} options
+ * @param {Timer} options.timer
+ */
+export function initTimerDisplay({ timer }) {
+    timerRef = timer;
+
+    timerDisplay.container?.addEventListener('mouseup', startOrPauseTimer);
+    timerDisplay.container?.addEventListener('mousedown', checkForLongClick);
+    timerDisplay.container?.addEventListener('touchstart', startOrPauseTimer);
+    timerDisplay.container?.addEventListener('touchend', checkForLongClick);
+
+    timerDisplay.container?.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    });
+
+    timerRef.subscribe('update', updateTimerDisplay);
+    timerRef.subscribe('reset', updateTimerDisplay);
+}
+
 function updateTimerDisplay() {
-    const value = timer.value;
+    const value = timerRef.value;
     if(value < 0) {
         show(timerDisplay.sign);
     } else {
         hide(timerDisplay.sign);
     }
-    const hours = timer.hours();
-    const minutes =  timer.minutes();
-    const seconds = timer.seconds();
-    const milliseconds = timer.milliseconds();
+    const hours = timerRef.hours();
+    const minutes =  timerRef.minutes();
+    const seconds = timerRef.seconds();
+    const milliseconds = timerRef.milliseconds();
 
     if(timerDisplay?.hours) {
         timerDisplay.hours.textContent = ( hours < 10 ? '0' : '' ) + hours;
@@ -31,4 +55,50 @@ function updateTimerDisplay() {
     if(timerDisplay?.milliseconds) {
         timerDisplay.milliseconds.textContent = ( milliseconds < 100 ? '0' : '' ) + ( milliseconds < 10 ? '0' : '') + milliseconds ;
     }
+}
+
+let longClickTimer;
+let wasLastActionReset = false;
+function startOrPauseTimer(e) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    e.preventDefault( )
+
+    if(wasLastActionReset) {
+        wasLastActionReset = false;
+        return;
+    };
+
+    clearTimeout(longClickTimer);
+    if(
+        timerRef.can('start')
+    ) {
+        timerRef.start();
+    } else if(
+        timerRef.can('resume')
+    ) {
+        timerRef.resume()
+    } else if(
+        timerRef.can('pause')
+    ) {
+        timerRef.pause();
+    }
+}
+
+const LONG_CLICK_THRESHOLD = 1000;
+function checkForLongClick(e) {
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    e.preventDefault();
+
+    if(wasLastActionReset) {
+        wasLastActionReset = false;
+        return;
+    }
+
+    longClickTimer = setTimeout(() => {
+        timerRef.reset();
+        wasLastActionReset = true;
+    }, LONG_CLICK_THRESHOLD);
+    return;
 }
