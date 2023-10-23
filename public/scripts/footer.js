@@ -17,7 +17,7 @@ export function initFooter() {
 
         // get colors
         const pageColors = getPageColors();
-        
+
         // get start timer
         const startTime = getStartTimeInMilliseconds();
 
@@ -40,12 +40,12 @@ export function initFooter() {
 
         const timerUrl = new URL(`http://localhost:8080/timer/?${urlParams.toString()}`);
 
-        const width = 450;
-        const height = 100;
+        const width = 550;
+        const height = 150;
         window.open(
-            timerUrl.toString(), 
-            'RaceTimer', 
-            `toolbar=0,location=0,status=0,menubar=0,scrollbars=0,resizable=0,width=${width},height=${height}`);
+            timerUrl.toString(),
+            'RaceTimer',
+            `toolbar=0,location=0,locationbar=0,status=0,menubar=0,scrollbars=0,resizable=0,width=${width},height=${height}`);
     });
 }
 

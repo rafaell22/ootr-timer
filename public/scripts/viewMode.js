@@ -1,6 +1,6 @@
 // @ts-check
 
-import { hide } from './domUtils.js';
+import { hide, show } from './domUtils.js';
 
 /**
  * @param {boolean} isBareView
@@ -17,12 +17,12 @@ export function setViewMode(isBareView) {
         const elementsToShow = document.querySelectorAll('.bare-view');
         console.log('show: ', elementsToShow)
         elementsToShow.forEach(element => {
-            hide(element);
+            show(element);
         });
 
-        document.getElementById('timer').classList.add('center-x-y');
+        document.getElementById('timer')?.classList.add('center-x-y');
         return;
     }
 
-    window.resizeTo(450, 100);
+    window.resizeTo(550, 150);
 }

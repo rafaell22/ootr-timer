@@ -6,6 +6,7 @@ import { initTimerButtons } from './timerButtons.js';
 import { initTimerDisplay } from './timerDisplay.js';
 import { initRacetimeEvents } from './racetime.js';
 import { initFooter } from './footer.js'
+import { initResizeEvent } from './resize.js';
 import { setViewMode } from './viewMode.js';
 
 const timer = new Timer();
@@ -22,6 +23,7 @@ initRacetimeEvents({
     race: urlSearchParams.get('race'),
     timer,
 });
+initResizeEvent();
 
 
 updateColorSettings({

@@ -6,5 +6,4 @@
 - [ ] FEATURE - Add countdown sound
 - [ ] FEATURE - Add icon in "bare" view to resize window;
 - [x] BUG - Update hours count
-- [ ] FEATURE - Add context menu to start/pause/reset in "bare" view. Maybe simply add a click event to the timer (click start/stops;
-- [ ] FEATURE - detect if mobile and show START, PAUSE and RESET buttons even on "bare" view;
+- [x] FEATURE - Add a click event to the timer (click start/stops, long click resets);
