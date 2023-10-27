@@ -8,6 +8,7 @@ import { initRacetimeEvents } from './racetime.js';
 import { initFooter } from './footer.js'
 import { initResizeEvent } from './resize.js';
 import { setViewMode } from './viewMode.js';
+import { initAudio } from './audio.js';
 
 const timer = new Timer();
 
@@ -36,36 +37,5 @@ updateColorSettings({
 
 setViewMode(urlSearchParams.get('bare') === 'true' ? true : false);
 
-/*
- * *
- * *
- *const elReferences = {};
- *elReferences.audio = document.querySelector('audio');
- *
- *
- */
+initAudio(timer);
 
-let countdownAudio;
-
-/*
- *const start = function() {
- *    if(isCountdown) {
- *      if(!countdownAudio) {
- *        const AudioContext = window.AudioContext || window.webkitAudioContext;
- *        const audioContext = new AudioContext();
- *        const track = audioContext.createMediaElementSource(elAudio);
- *                    track.connect(audioContext.destination);
- *                  }
- *                }
- *
- *                elButtonStart.classList.add('hidden');
- *                elButtonPause.classList.remove('hidden');
- *                elButtonReset.classList.remove('hidden');
- *
- *                animationFrame = requestAnimationFrame(step);
- *            };
- *
- *            elButtonStart.addEventListener('click', start);
- *            elButtonPause.addEventListener('click', pause);
- *
- */

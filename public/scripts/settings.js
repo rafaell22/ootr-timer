@@ -2,12 +2,17 @@
 import { show, hide } from './domUtils.js';
 import { setPageColors } from './pageColors.js';
 import Timer from './classes/Timer.js';
+import { toggleAudio } from './audio.js';
 
 const timerSettings = {
     dialog: document.getElementById('settings-dialog'),
     customStartTime : document.getElementById('ckCustomStartTime'),
     timerStartValue : document.getElementById('txtTimerStart'),
 };
+
+const audioSettings = {
+    countdownAudioEnabled: document.getElementById('ckCountDownAudioEnabled'),
+}
 
 const colorSettings = {
     primary: document.getElementById('primaryColor'),
@@ -53,6 +58,12 @@ export function initSettings({ timer }) {
     colorSettings.highlights?.addEventListener('change', changeColor);
     colorSettings.shadows?.addEventListener('change', changeColor);
     colorSettings.background?.addEventListener('change', changeColor);
+
+    audioSettings.countdownAudioEnabled?.addEventListener('change', toggleCountdownAudio)
+}
+
+function toggleCountdownAudio() {
+    toggleAudio();
 }
 
 export function getStartTime() {

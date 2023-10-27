@@ -28,6 +28,7 @@ export function initTimerDisplay({ timer }) {
     });
 
     timerRef.subscribe('update', updateTimerDisplay);
+    timerRef.subscribe('change', updateTimerDisplay);
     timerRef.subscribe('reset', updateTimerDisplay);
 }
 
