@@ -70,6 +70,7 @@ class Timer extends Fsm {
    */
   setTimer(timerValue) {
     this.value = timerValue;
+    this.publish('change');
   }
 
   /**
