@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Timer</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+         </style>
+        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.css">-->
+        <link rel="icon" href="./assets/clock.png">
+        <link rel="stylesheet" href="./styles/main.css">
+    </head>
+    <body>
+        <!--this library helps to debug when developping using a mobile device-->
+        <!--<script src="https://cdn.jsdelivr.net/gh/rafaell22/Console@1.2.0/console.js"></script>-->
+      <div id="resize" class="bare-view hidden">
+        <img src="./assets/resize.png" />
+      </div>
+      <p id="race-category" class="full-view"></p>
+      <p id="race-name" class="full-view"></p>
+      <div id="timer">
+        <div id="time-container" class="unselectable">
+          <span id="sign" class="hidden">-</span>
+          <span id="hours">00</span>
+          :
+          <span id="minutes">00</span>
+          :
+          <span id="seconds">00</span>
+          .
+          <span id="milliseconds">000</span>
+        </div>
+        <input type="button" value="START" id="btnStart" class="full-view" />
+        <input type="button" value="PAUSE" id="btnPause" class="hidden" />
+        <input type="button" value="RESET" id="btnReset" class="hidden" />
+        <input type="button" value="RACETIME" id="btnJoin" class="full-view" />
+
+
+      </div>
+
+      <div id="racetime-dialog" class="hidden above-overlay-1">
+        <select id="selectCategory" class="hidden"></select>
+        <select id="selectRace" class="hidden"></select>
+        <input type="button" value="SELECT" id="btnSelectRace" class="hidden" />
+      </div>
+      <div id="dialog-overlay" class="overlay hidden layer-overlay"></div>
+      <div id="loader" class="overlay hidden layer-loader">
+        <span class="loader"></span>
+      </div>
+
+      <div id="settings-dialog" class="hidden above-overlay-1">
+        <p>Start Time</p>
+        <div class="row">
+          <input type="checkbox" value="false" id="ckCustomStartTime" />
+          <label>Custom Start Time</label>
+        </div>
+        <div class="row hidden">
+          <input type="text" value="" id="txtTimerStart" placeholder="Start Time (seconds)" />
+        </div>
+        <div class="row">
+          <input type="checkbox" value="false" id="ckCountDownAudioEnabled" />
+          <label>Countdown Sound</label>
+        </div>
+        <p>Colors</p>
+        <div class="row">
+          <input type="color" id="primaryColor" value="#000000" />
+          <label>Primary</label>
+        </div>
+        <div class="row">
+          <input type="color" id="secondaryColor" value="#000000" />
+          <label>Secondary</label>
+        </div>
+        <div class="row">
+          <input type="color" id="highlightsColor" value="#000000" />
+          <label>Highlights</label>
+        </div>
+        <div class="row">
+          <input type="color" id="shadowsColor" value="#000000" />
+          <label>Shadows</label>
+        </div>
+        <div class="row">
+          <input type="color" id="backgroundColor" value="#000000" />
+          <label>Background</label>
+        </div>
+        <p>Text Format</p>
+        <p>Audio</p>
+      </div>
+
+      <div id="footer" class="full-view">
+          <div id="settings">
+              <img src="./assets/gear.png" />
+          </div>
+          <div id="open-window">
+              <img src="./assets/openWindow.png" />
+          </div>
+      </div>
+
+      <audio src="./assets/countdown.wav"></audio>
+      <script type="module" src="./scripts/main.js"></script>
+    </body>
+</html>
