@@ -77,7 +77,6 @@ class Timer extends Fsm {
    * @param {number} timestamp - total time passed in milliseconds
    */
   update(timestamp) {
-      console.log('update!')
     let dt;
     if(!this.prevTimestamp) {
         dt = 0;

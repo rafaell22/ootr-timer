@@ -8,14 +8,12 @@ import { hide, show } from './domUtils.js';
 export function setViewMode(isBareView) {
     if(isBareView) {
         const elementsToHide = document.querySelectorAll('.full-view');
-        console.log('hide: ', elementsToHide)
         elementsToHide.forEach(element => {
             hide(element);
         });
 
 
         const elementsToShow = document.querySelectorAll('.bare-view');
-        console.log('show: ', elementsToShow)
         elementsToShow.forEach(element => {
             show(element);
         });

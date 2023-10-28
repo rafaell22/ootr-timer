@@ -21,7 +21,7 @@ PubSub.prototype.subscribe = function(event, callback) {
         id: id,
         callback: callback
     });
-    
+
     return id;
 }
 
