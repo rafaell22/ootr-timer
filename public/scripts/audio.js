@@ -26,23 +26,21 @@ export function initAudio(timer) {
 
     timerRef = timer;
 
-    timerRef.subscribe('start', () => {
-        console.log('isAudioEnabled', isAudioEnabled);
-        console.log('timerRef.value', timerRef.value);
+    const startSubscriptionId = timerRef.subscribe('start', () => {
         if(
             isAudioEnabled &&
             timerRef.value < 0
         ) {
-            const subscriptionId = timerRef.subscribe('update', () => {
+            const updateSubscriptionId = timerRef.subscribe('update', () => {
                 if (
                     timerRef.value > -3000
                 ) {
                     elAudio.play();
+                    timerRef.unsubscribe('update', updateSubscriptionId);
                 }
 
-                timerRef.unsubscribe(subscriptionId);
+                timerRef.unsubscribe('start', startSubscriptionId);
             });
-            console.log(subscriptionId);
         }
     });
 }

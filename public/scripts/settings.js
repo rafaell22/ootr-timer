@@ -43,6 +43,11 @@ export function initSettings({ timer }) {
         }
     });
 
+    timerSettings.timerStartValue?.addEventListener('change', function() {
+        const startTime = ( timerSettings.timerStartValue?.['value'] ?? 0 ) * 1000;
+        setStartTime(startTime);
+    });
+
     colorSettings.primary?.addEventListener('change', function changePrimaryColor() {
         setPageColors({
             primary: colorSettings.primary?.['value'],
