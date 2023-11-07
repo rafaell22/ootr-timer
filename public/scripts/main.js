@@ -39,3 +39,12 @@ setViewMode(urlSearchParams.get('bare') === 'true' ? true : false);
 
 initAudio(timer);
 
+if(urlSearchParams.get('start')) {
+    let startTime = 0;
+    try {
+        startTime = parseInt(urlSearchParams.get('start'));
+        timer.setTimer(startTime);
+    } catch(errorParsingStartTime) {
+        console.error('Invalid start time!');
+    }
+}
